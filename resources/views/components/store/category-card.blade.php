@@ -1,0 +1,3 @@
+@props(['category'])
+
+<article class="category-card"><div class="category-art {{ $category['image'] }}">@if($category['image_url'])<img class="category-photo" src="{{ $category['image_url'] }}" alt="{{ $category['name'] }}" loading="lazy">@else<i class="mini-jar"></i><span>✿</span>@endif</div><div class="category-body"><span class="category-icon"><i data-lucide="{{ $category['icon'] }}"></i></span><div><h3>{{ $category['name'] }}</h3><p>{{ $category['description'] }}</p><a href="{{ route('storefront.shop', ['category' => $category['slug']]) }}">{{ __('store.view_collection') }} <i data-lucide="arrow-right"></i></a></div></div></article>

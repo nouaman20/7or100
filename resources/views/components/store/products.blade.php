@@ -1,0 +1,3 @@
+@props(['products', 'search' => null, 'eyebrow' => null, 'title' => null])
+
+<section class="products-section" id="products"><div class="store-container"><div class="products-heading"><x-store.section-heading :eyebrow="$eyebrow ?? __('store.best_eyebrow')" :title="$title ?? __('store.best_title')" /><a href="{{ route('storefront.shop') }}">{{ __('store.view_products') }} <i data-lucide="arrow-right"></i></a></div><div class="product-grid">@forelse($products as $product)<x-store.product-card :product="$product" />@empty<div class="empty-products">{{ $search ? __('store.no_results') : __('store.no_products') }}</div>@endforelse</div></div></section>
