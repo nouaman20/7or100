@@ -50,12 +50,8 @@
             min-height: 100vh;
             overflow: hidden;
             isolation: isolate;
-            background: #e9d9ae;
-
-            /*
-             * Add your image here when ready:
-             * background-image: url('/images/honey-hero.jpg');
-             */
+            background-color: #e9d9ae;
+            background-image: url("{{ asset('images/honey-hero.jpg') }}");
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;

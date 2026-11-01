@@ -4,7 +4,7 @@
 @section('title', 'Catégories | 7or 100')
 
 @section('content')
-<div class="mn-categories min-h-full">
+<div class="page mn-categories min-h-full">
 
     {{-- Page heading --}}
     <div class="mb-7 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">

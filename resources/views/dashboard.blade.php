@@ -15,7 +15,6 @@
     <body class="{{ $locale === 'ar' ? 'arabic' : '' }}">
         @php
             $icons = ['dashboard' => 'house', 'products' => 'box', 'categories' => 'layers-3', 'blog' => 'newspaper', 'orders' => 'shopping-cart', 'marketing' => 'megaphone', 'settings' => 'settings'];
-            $months = $locale === 'ar' ? ['يناير', 'فبراير', 'مارس', 'أبريل', 'ماي', 'يونيو', 'يوليوز', 'غشت', 'شتنبر', 'أكتوبر', 'نونبر', 'ديسمبر'] : ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc 2025'];
         @endphp
         <div class="app-shell">
             
