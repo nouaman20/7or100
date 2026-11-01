@@ -27,7 +27,7 @@
 
     <div class="store-container footer-main">
         <div class="footer-brand-block">
-            <a class="store-logo" href="{{ route('storefront.home') }}"><span class="logo-honeycomb" aria-hidden="true"><i></i><i></i><i></i><b>🐝</b></span><span><strong>7or</strong><small>{{ __('store.tagline') }}</small></span></a>
+            <a class="store-logo" href="{{ route('storefront.home') }}" aria-label="7or 100"><img class="store-logo-image" src="{{ asset('images/logo.png') }}" alt="7or 100"></a>
             <p>{{ __('newsletter.footer_brand') }}</p>
         </div>
         <div class="footer-link-block">

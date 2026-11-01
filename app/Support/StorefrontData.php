@@ -112,6 +112,7 @@ final class StorefrontData
             ])->all(),
             'image' => $artKey,
             'image_url' => $image ? Storage::disk('public')->url($image->image) : null,
+            'image_alt' => $image?->alt ?: $product->name,
             'starting_price' => (float) ($availableVariants->min('price') ?? $product->product_variants->min('price')),
             'variants' => $product->product_variants->map(fn ($variant): array => [
                 'id' => $variant->id,

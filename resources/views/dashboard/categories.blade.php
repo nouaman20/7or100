@@ -1,7 +1,7 @@
 
 @extends('dashboard')
 
-@section('title', 'Catégories | MielNature')
+@section('title', 'Catégories | 7or 100')
 
 @section('content')
 <div class="mn-categories min-h-full">

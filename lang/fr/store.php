@@ -35,6 +35,8 @@ return [
     'hero_before' => 'Le meilleur de la nature dans',
     'hero_highlight' => 'chaque pot',
     'hero_copy' => 'Miel pur, amlou authentique et produits naturels sélectionnés avec soin pour votre bien-être.',
+    'hero_image_alt' => 'Miel naturel, rayon de miel, fleurs blanches et louche en bois',
+    'hero_image_caption' => 'Du rucher marocain à votre table',
     'discover' => 'Découvrir nos produits',
     'benefits' => [['icon' => 'leaf', 'title' => 'Produits naturels', 'copy' => 'et authentiques'], ['icon' => 'truck', 'title' => 'Livraison rapide', 'copy' => 'partout au Maroc'], ['icon' => 'shield-check', 'title' => 'Paiement sécurisé', 'copy' => '100% confiance']],
     'categories_eyebrow' => 'Nos Catégories',

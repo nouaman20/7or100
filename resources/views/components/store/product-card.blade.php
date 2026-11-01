@@ -8,10 +8,14 @@
 
 <article class="product-card">
     <a class="product-card-media-link" href="{{ route('storefront.products.show', $product['slug']) }}" aria-label="{{ __('store.view_details_for', ['product' => $product['name']]) }}">
-        <div class="product-art {{ $product['image'] }}">
+        <div class="product-art {{ $product['image'] }} {{ $product['image_url'] ? 'has-product-photo' : '' }}">
             <span class="product-card-category-chip">{{ $product['category'] }}</span>
             <span class="product-card-stock-chip {{ $canPurchase ? 'available' : 'unavailable' }}"><i></i>{{ $canPurchase ? __('store.in_stock') : __('store.out_of_stock') }}</span>
-            @if($product['image_url'])<img class="product-photo" src="{{ $product['image_url'] }}" alt="{{ $product['name'] }}" loading="lazy">@else<i class="product-jar"></i><i class="product-plant">✿</i>@endif
+            @if($product['image_url'])
+                <span class="product-card-photo-frame"><img src="{{ $product['image_url'] }}" alt="{{ $product['image_alt'] ?? $product['name'] }}" loading="lazy"></span>
+            @else
+                <i class="product-jar"></i><i class="product-plant">✿</i>
+            @endif
             <span class="product-card-image-action"><i data-lucide="scan-eye"></i>{{ __('store.view_details') }}</span>
         </div>
     </a>

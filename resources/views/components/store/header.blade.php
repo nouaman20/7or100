@@ -1,8 +1,7 @@
 <header class="store-header">
     <div class="store-container header-inner">
-        <a class="store-logo" href="{{ route('storefront.home') }}" aria-label="7or">
-            <span class="logo-honeycomb" aria-hidden="true"><i></i><i></i><i></i><b>🐝</b></span>
-            <span><strong>7or</strong><small>{{ __('store.tagline') }}</small></span>
+        <a class="store-logo" href="{{ route('storefront.home') }}" aria-label="7or 100">
+            <img class="store-logo-image" src="{{ asset('images/logo.png') }}" alt="7or 100">
         </a>
         <nav class="store-nav" aria-label="Navigation principale">
             @foreach (__('store.navigation') as $key => $label)

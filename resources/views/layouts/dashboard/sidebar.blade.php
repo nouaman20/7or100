@@ -2,11 +2,7 @@
     $icons = $icons ?? ['dashboard' => 'house', 'products' => 'box', 'categories' => 'layers-3', 'blog' => 'newspaper', 'orders' => 'shopping-cart', 'marketing' => 'megaphone', 'settings' => 'settings'];
 @endphp
 <aside class="sidebar" data-sidebar>
-    <div class="brand">
-        <div class="brand-mark" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><i></i></div>
-        <div class="brand-copy"><strong>7or100</strong><small>{{ __('dashboard.brand_tagline') }}</small></div>
-    </div>
+    <div class="brand"><img class="dashboard-brand-logo" src="{{ asset('images/logo.png') }}" alt="7or 100"></div>
 
     <nav class="nav-list" aria-label="{{ __('dashboard.title') }}">
         @foreach (__('dashboard.navigation') as $key => $label)

@@ -5,6 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#f7a900">
+        <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
         <title>{{ $metaTitle ?: __('store.meta_title') }}</title>
         <meta name="description" content="{{ $metaDescription ?: __('store.meta_description') }}">
         <meta name="robots" content="{{ $robots }}">

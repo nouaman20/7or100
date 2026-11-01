@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#fbf8ef">
 
-    <title>{{ __('login.title') }} | 7or</title>
+    <title>{{ __('login.title') }} | 7or 100</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -91,40 +92,11 @@
             text-decoration: none;
         }
 
-        .brand-symbol {
-            display: grid;
-            place-items: center;
-            flex-shrink: 0;
-            width: 43px;
-            height: 43px;
-            color: #fff;
-            background: #ffb900;
-            clip-path: polygon(
-                50% 0%, 70% 15%, 93% 15%, 100% 39%,
-                83% 58%, 83% 82%, 59% 100%, 40% 84%,
-                17% 84%, 0% 60%, 16% 41%, 16% 18%, 37% 17%
-            );
-        }
-
-        .brand-symbol svg {
-            width: 27px;
-            height: 27px;
-        }
-
-        .brand-name {
+        .auth-brand-logo {
             display: block;
-            font-size: 26px;
-            font-weight: 900;
-            line-height: 1.15;
-            letter-spacing: -.7px;
-        }
-
-        .brand-tagline {
-            display: block;
-            margin-top: 3px;
-            color: #73745f;
-            font-size: 12px;
-            font-weight: 500;
+            width: 168px;
+            height: 112px;
+            object-fit: contain;
         }
 
         .hero-copy {
@@ -184,27 +156,12 @@
         .login-brand {
             display: flex;
             justify-content: center;
-            margin-bottom: 59px;
+            margin-bottom: 26px;
         }
 
-        .login-brand .brand-symbol {
-            width: 68px;
-            height: 72px;
-        }
-
-        .login-brand .brand-symbol svg {
-            width: 43px;
-            height: 43px;
-        }
-
-        .login-brand .brand-name {
-            font-size: 38px;
-            letter-spacing: -.8px;
-        }
-
-        .login-brand .brand-tagline {
-            margin-top: 4px;
-            font-size: 19px;
+        .login-brand .auth-brand-logo {
+            width: 160px;
+            height: 107px;
         }
 
         .login-heading {
@@ -552,20 +509,12 @@
             }
 
             .login-brand {
-                margin-bottom: 42px;
+                margin-bottom: 25px;
             }
 
-            .login-brand .brand-name {
-                font-size: 32px;
-            }
-
-            .login-brand .brand-tagline {
-                font-size: 16px;
-            }
-
-            .login-brand .brand-symbol {
-                width: 58px;
-                height: 62px;
+            .login-brand .auth-brand-logo {
+                width: 150px;
+                height: 100px;
             }
         }
 
@@ -589,7 +538,7 @@
             }
 
             .login-brand {
-                margin-bottom: 38px;
+                margin-bottom: 25px;
             }
 
             .login-heading h2 {
@@ -628,12 +577,9 @@
                 padding: 30px 17px;
             }
 
-            .login-brand .brand-name {
-                font-size: 29px;
-            }
-
-            .login-brand .brand-tagline {
-                font-size: 14px;
+            .login-brand .auth-brand-logo {
+                width: 150px;
+                height: 100px;
             }
 
             .form-options {
@@ -658,25 +604,13 @@
 <div class="login-layout">
 
     <!-- LEFT: BRAND / HERO PANEL -->
-    <aside class="hero-panel" aria-label="MielNature">
+    <aside class="hero-panel" aria-label="7or 100">
         <div class="leaf-decoration leaf-decoration-top"></div>
 
         <div class="hero-content">
 
-            <!-- Replace this text logo with your own logo if needed -->
-            <a href="{{ url('/') }}" class="brand" aria-label="MielNature - Accueil">
-                <span class="brand-symbol" aria-hidden="true">
-                    <svg viewBox="0 0 40 40" fill="none">
-                        <path d="M20 4L24 13L34 10L29 19L36 25L25 26L22 36L16 27L6 30L11 21L4 14L15 15Z"
-                              fill="#fff5cf" stroke="#fff" stroke-width="1.5"/>
-                        <circle cx="20" cy="19" r="5" fill="#e8a300"/>
-                    </svg>
-                </span>
-
-                <span>
-                    <span class="brand-name">MielNature</span>
-                    <span class="brand-tagline">{{ __('store.tagline') }}</span>
-                </span>
+            <a href="{{ url('/') }}" class="brand" aria-label="7or 100 - Accueil">
+                <img class="auth-brand-logo" src="{{ asset('images/logo.png') }}" alt="7or 100">
             </a>
 
             <div class="hero-copy">
@@ -715,19 +649,8 @@
 
             <!-- Login logo -->
             <div class="login-brand">
-                <a href="{{ url('/') }}" class="brand" aria-label="MielNature">
-                    <span class="brand-symbol" aria-hidden="true">
-                        <svg viewBox="0 0 40 40" fill="none">
-                            <path d="M20 4L24 13L34 10L29 19L36 25L25 26L22 36L16 27L6 30L11 21L4 14L15 15Z"
-                                  fill="#fff5cf" stroke="#fff" stroke-width="1.5"/>
-                            <circle cx="20" cy="19" r="5" fill="#e8a300"/>
-                        </svg>
-                    </span>
-
-                    <span>
-                        <span class="brand-name">MielNature</span>
-                        <span class="brand-tagline">{{ __('store.tagline') }}</span>
-                    </span>
+                <a href="{{ url('/') }}" class="brand" aria-label="7or 100">
+                    <img class="auth-brand-logo" src="{{ asset('images/logo.png') }}" alt="7or 100">
                 </a>
             </div>
 
