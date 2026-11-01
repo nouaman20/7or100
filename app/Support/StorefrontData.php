@@ -59,14 +59,15 @@ final class StorefrontData
                     ->orWhere('description', 'like', '%'.$search.'%');
             }))
             ->latest()
+            ->limit(4)
             ->get()
             ->map(fn (Product $product): array => $this->productCard($product));
 
-        $bestPacks = $catalogQuery()->where('is_pack', true)->where('is_featured', true)->latest()->limit(5)->get()
+        $bestPacks = $catalogQuery()->where('is_pack', true)->where('is_featured', true)->latest()->limit(4)->get()
             ->map(fn (Product $product): array => $this->productCard($product));
-        $featuredProducts = $catalogQuery()->where('is_pack', false)->where('is_featured', true)->latest()->limit(5)->get()
+        $featuredProducts = $catalogQuery()->where('is_pack', false)->where('is_featured', true)->latest()->limit(4)->get()
             ->map(fn (Product $product): array => $this->productCard($product));
-        $newestProducts = $catalogQuery()->latest()->limit(5)->get()
+        $newestProducts = $catalogQuery()->latest()->limit(4)->get()
             ->map(fn (Product $product): array => $this->productCard($product));
 
         return [

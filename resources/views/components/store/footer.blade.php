@@ -15,9 +15,13 @@
                         <input id="newsletterEmail" type="email" name="newsletter_email" value="{{ old('newsletter_email') }}" placeholder="{{ __('newsletter.email_placeholder') }}" autocomplete="email" maxlength="255" required>
                         <button type="submit"><span>{{ __('newsletter.subscribe') }}</span><i data-lucide="arrow-right"></i></button>
                     </div>
-                    @error('newsletter_email', 'newsletter')<small class="newsletter-error">{{ $message }}</small>@enderror
+                    @if(isset($errors) && $errors->getBag('newsletter')->has('newsletter_email'))
+                        <small class="newsletter-error">{{ $errors->getBag('newsletter')->first('newsletter_email') }}</small>
+                    @endif
                     <label class="newsletter-consent"><input type="checkbox" name="newsletter_consent" value="1" @checked(old('newsletter_consent') === '1') required><span>{{ __('newsletter.consent') }}</span></label>
-                    @error('newsletter_consent', 'newsletter')<small class="newsletter-error">{{ $message }}</small>@enderror
+                    @if(isset($errors) && $errors->getBag('newsletter')->has('newsletter_consent'))
+                        <small class="newsletter-error">{{ $errors->getBag('newsletter')->first('newsletter_consent') }}</small>
+                    @endif
                     <small class="newsletter-privacy">{{ __('newsletter.privacy_note') }}</small>
                 </form>
             </div>

@@ -38,6 +38,42 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+    const storefront = document.body;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!storefront.classList.contains('storefront') || reducedMotion || !('IntersectionObserver' in window)) return;
+
+    const motionItems = document.querySelectorAll(
+        '.storefront main > *, .storefront .store-footer > .newsletter-band, .storefront .store-footer > .footer-main, .storefront .store-footer > .footer-bottom, .storefront [data-product-card], .storefront .category-card, .storefront .blog-card, .storefront .testimonial'
+    );
+
+    if (!motionItems.length) return;
+
+    storefront.classList.add('store-motion-ready');
+
+    const observer = new IntersectionObserver((entries, currentObserver) => {
+        entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+
+            entry.target.classList.add('is-visible');
+            currentObserver.unobserve(entry.target);
+        });
+    }, {
+        rootMargin: '0px 0px -36px 0px',
+        threshold: 0.08,
+    });
+
+    motionItems.forEach((item, index) => {
+        const isCard = item.matches('[data-product-card], .category-card, .blog-card, .testimonial');
+        const stagger = isCard ? index % 5 : Math.min(index, 5);
+
+        item.dataset.motionReveal = '';
+        item.style.setProperty('--motion-delay', `${stagger * (isCard ? 32 : 48)}ms`);
+        observer.observe(item);
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
     const root = document.querySelector('[data-cart-autopen]');
     const drawer = document.querySelector('#storeCart');
     const openers = document.querySelectorAll('[data-cart-open]');

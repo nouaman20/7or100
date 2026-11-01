@@ -22,7 +22,7 @@
     </head>
     <body class="storefront {{ $locale === 'ar' ? 'arabic' : '' }}">
         @php
-            $storeFlash = session('cart_status') ?: session('newsletter_status') ?: $errors->first();
+            $storeFlash = session('cart_status') ?: session('newsletter_status') ?: (isset($errors) ? $errors->first() : null);
         @endphp
         {{ $slot }}
         <x-store.cart-sidebar />
