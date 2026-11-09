@@ -54,10 +54,15 @@ class StorefrontShopController extends Controller
                 $productQuery->where('name', 'like', '%'.$filters['q'].'%')
                     ->orWhere('description', 'like', '%'.$filters['q'].'%');
             }))
-            ->whereHas('product_variants', $applyVariantFilters)
+            ->where(function ($query) use ($applyVariantFilters, $filters): void {
+                $query->whereHas('product_variants', $applyVariantFilters);
+
+                if ($filters['min_price'] === null && $filters['max_price'] === null && $filters['min_weight'] === null && $filters['max_weight'] === null) {
+                    $query->orWhereDoesntHave('product_variants');
+                }
+            })
             ->with([
                 'category',
-                'packItems',
                 'product_variants' => function ($query) use ($applyVariantFilters): void {
                     $applyVariantFilters($query);
                     $query->orderBy('weight_grams');

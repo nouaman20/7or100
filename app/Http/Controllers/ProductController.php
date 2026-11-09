@@ -35,7 +35,6 @@ class ProductController extends Controller
             'locale' => app()->getLocale(),
             'product' => new Product(['is_active' => true]),
             'categories' => Category::query()->orderBy('name')->get(),
-            'packProducts' => Product::query()->where('is_pack', false)->orderBy('name')->get(['id', 'name']),
         ]);
     }
 
@@ -56,7 +55,6 @@ class ProductController extends Controller
 
             $this->syncImages($request, $product);
             $this->syncVariants($validated['variants'] ?? [], $product);
-            $product->packItems()->sync($request->boolean('is_pack') ? ($validated['pack_items'] ?? []) : []);
 
             return $product;
         });
@@ -69,14 +67,12 @@ class ProductController extends Controller
         $product->load([
             'product_images' => fn ($query) => $query->orderBy('sort_order'),
             'product_variants' => fn ($query) => $query->orderBy('weight_grams'),
-            'packItems',
         ]);
 
         return view('dashboard.products.form', [
             'locale' => app()->getLocale(),
             'product' => $product,
             'categories' => Category::query()->orderBy('name')->get(),
-            'packProducts' => Product::query()->where('is_pack', false)->where('id', '!=', $product->id)->orderBy('name')->get(['id', 'name']),
         ]);
     }
 
@@ -98,7 +94,6 @@ class ProductController extends Controller
 
             $removedImagePaths = $this->syncImages($request, $product);
             $this->syncVariants($validated['variants'] ?? [], $product, $request->input('remove_variants', []));
-            $product->packItems()->sync($request->boolean('is_pack') ? ($validated['pack_items'] ?? []) : []);
         });
 
         Storage::disk('public')->delete($removedImagePaths);
@@ -125,8 +120,6 @@ class ProductController extends Controller
             'is_active' => ['nullable', 'boolean'],
             'is_pack' => ['nullable', 'boolean'],
             'is_featured' => ['nullable', 'boolean'],
-            'pack_items' => ['nullable', 'array', 'required_if:is_pack,1', 'min:1'],
-            'pack_items.*' => ['required', 'uuid', 'distinct', 'exists:products,id'],
             'images' => ['nullable', 'array', 'max:10'],
             'images.*' => ['required', 'image', 'max:5120'],
             'image_alts' => ['nullable', 'array'],
@@ -136,7 +129,7 @@ class ProductController extends Controller
             'primary_image' => ['nullable', 'string', 'max:100'],
             'remove_images' => ['nullable', 'array'],
             'remove_images.*' => ['uuid'],
-            'variants' => ['required', 'array', 'min:1'],
+            'variants' => ['nullable', 'array'],
             'variants.*.name' => ['required', 'string', 'max:255'],
             'variants.*.weight_grams' => ['required', 'integer', 'min:1', 'max:4294967295'],
             'variants.*.price' => ['required', 'numeric', 'min:0', 'max:99999999.99'],
@@ -145,19 +138,6 @@ class ProductController extends Controller
             'remove_variants' => ['nullable', 'array'],
             'remove_variants.*' => ['uuid'],
         ]);
-
-        if ($request->boolean('is_pack')) {
-            $packItems = $validated['pack_items'] ?? [];
-            $validPackItems = Product::query()
-                ->whereKey($packItems)
-                ->where('is_pack', false)
-                ->when($product, fn ($query) => $query->where('id', '!=', $product->id))
-                ->count();
-
-            if ($validPackItems !== count($packItems)) {
-                throw ValidationException::withMessages(['pack_items' => __('products.invalid_pack_items')]);
-            }
-        }
 
         $variantKeys = array_keys($validated['variants'] ?? []);
         if ($product) {
@@ -174,9 +154,6 @@ class ProductController extends Controller
                 }
             }
 
-            if (count(array_diff($variantKeys, $removedVariantIds)) < 1) {
-                throw ValidationException::withMessages(['variants' => __('products.minimum_variant')]);
-            }
         }
 
         return $validated;

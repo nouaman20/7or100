@@ -13,13 +13,14 @@ class StorefrontProductController extends Controller
             ->where('slug', $slug)
             ->where('is_active', true)
             ->whereHas('category', fn ($query) => $query->where('is_active', true))
-            ->whereHas('product_variants', function ($query): void {
-                $query->where('is_active', true)
-                    ->where(fn ($stockQuery) => $stockQuery->whereNull('stock_quantity')->orWhere('stock_quantity', '>', 0));
+            ->where(function ($query): void {
+                $query->whereHas('product_variants', function ($variants): void {
+                    $variants->where('is_active', true)
+                        ->where(fn ($stockQuery) => $stockQuery->whereNull('stock_quantity')->orWhere('stock_quantity', '>', 0));
+                })->orWhereDoesntHave('product_variants');
             })
             ->with([
                 'category',
-                'packItems',
                 'product_images' => fn ($query) => $query->orderByDesc('is_primary')->orderBy('sort_order'),
                 'product_variants' => function ($query): void {
                     $query->where('is_active', true)

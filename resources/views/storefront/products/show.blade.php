@@ -30,21 +30,25 @@
             <div class="product-detail-info">
                 <span class="product-detail-category">{{ $product->category->name }}</span>
                 <h1>{{ $product->name }}</h1>
-                <div class="product-detail-price"><strong data-variant-price>{{ number_format((float) $product->product_variants->first()->price, 2) }}</strong><span>{{ __('orders.madd') }}</span></div>
+                <div class="product-detail-price"><strong data-variant-price>{{ $product->product_variants->isNotEmpty() ? number_format((float) $product->product_variants->first()->price, 2) : __('store.price_not_set') }}</strong>@if($product->product_variants->isNotEmpty())<span>{{ __('orders.madd') }}</span>@endif</div>
 
-                <form class="product-detail-purchase" action="{{ route('cart.items.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="return_to" value="product">
-                    <label for="detailVariant">{{ __('orders.variant') }}</label>
-                    <select id="detailVariant" name="variant_id" data-variant-select required>
-                        @foreach ($product->product_variants as $variant)
-                            <option value="{{ $variant->id }}" data-price="{{ number_format((float) $variant->price, 2, '.', '') }}" data-stock="{{ $variant->stock_quantity ?? 20 }}" @selected($loop->first)>{{ $variant->name }}</option>
-                        @endforeach
-                    </select>
-                    <label for="detailQuantity">{{ __('orders.quantity') }}</label>
-                    <div class="product-detail-quantity"><button type="button" data-quantity-step="-1" aria-label="{{ __('store.decrease_quantity') }}">−</button><input id="detailQuantity" type="number" name="quantity" min="1" max="{{ min(20, $product->product_variants->first()->stock_quantity ?? 20) }}" value="1" required data-quantity-input><button type="button" data-quantity-step="1" aria-label="{{ __('store.increase_quantity') }}">+</button></div>
-                    <button class="gold-button product-detail-add" type="submit"><i data-lucide="shopping-cart"></i>{{ __('store.add_to_cart') }}</button>
-                </form>
+                @if($product->product_variants->isNotEmpty())
+                    <form class="product-detail-purchase" action="{{ route('cart.items.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="return_to" value="product">
+                        <label for="detailVariant">{{ __('orders.variant') }}</label>
+                        <select id="detailVariant" name="variant_id" data-variant-select required>
+                            @foreach ($product->product_variants as $variant)
+                                <option value="{{ $variant->id }}" data-price="{{ number_format((float) $variant->price, 2, '.', '') }}" data-stock="{{ $variant->stock_quantity ?? 20 }}" @selected($loop->first)>{{ $variant->name }}</option>
+                            @endforeach
+                        </select>
+                        <label for="detailQuantity">{{ __('orders.quantity') }}</label>
+                        <div class="product-detail-quantity"><button type="button" data-quantity-step="-1" aria-label="{{ __('store.decrease_quantity') }}">−</button><input id="detailQuantity" type="number" name="quantity" min="1" max="{{ min(20, $product->product_variants->first()->stock_quantity ?? 20) }}" value="1" required data-quantity-input><button type="button" data-quantity-step="1" aria-label="{{ __('store.increase_quantity') }}">+</button></div>
+                        <button class="gold-button product-detail-add" type="submit"><i data-lucide="shopping-cart"></i>{{ __('store.add_to_cart') }}</button>
+                    </form>
+                @else
+                    <p class="product-options-pending">{{ __('store.product_options_pending') }}</p>
+                @endif
 
                 <div class="product-detail-benefits"><span><i data-lucide="leaf"></i>{{ __('store.natural_product') }}</span><span><i data-lucide="truck"></i>{{ __('store.delivery_morocco') }}</span></div>
             </div>
@@ -54,13 +58,6 @@
             <h2>{{ __('store.product_information') }}</h2>
             <p>{{ $product->description ?: __('store.product_description_pending') }}</p>
         </section>
-
-        @if($product->is_pack && $product->packItems->isNotEmpty())
-            <section class="product-detail-pack-panel">
-                <h2>{{ __('store.pack_contents') }}</h2>
-                <ul>@foreach($product->packItems as $packItem)<li><i data-lucide="package-check"></i><span>{{ $packItem->name }}</span></li>@endforeach</ul>
-            </section>
-        @endif
 
         <section class="product-detail-more"><x-store.section-heading :eyebrow="__('store.best_eyebrow')" :title="__('store.view_products')" /><a class="gold-button" href="{{ route('storefront.shop') }}">{{ __('store.continue_shopping') }} <i data-lucide="arrow-right"></i></a></section>
     </main>

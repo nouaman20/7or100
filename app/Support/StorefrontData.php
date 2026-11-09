@@ -39,17 +39,12 @@ final class StorefrontData
         $catalogQuery = static fn () => Product::query()
             ->where('is_active', true)
             ->whereHas('category', fn ($query) => $query->where('is_active', true))
-            ->whereHas('product_variants', function ($query): void {
-                $query->where('is_active', true)
-                    ->where(fn ($stockQuery) => $stockQuery->whereNull('stock_quantity')->orWhere('stock_quantity', '>', 0));
-            })
             ->with([
                 'category',
                 'product_variants' => fn ($query) => $query->where('is_active', true)
                     ->where(fn ($stockQuery) => $stockQuery->whereNull('stock_quantity')->orWhere('stock_quantity', '>', 0))
                     ->orderBy('weight_grams'),
                 'product_images' => fn ($query) => $query->orderByDesc('is_primary')->orderBy('sort_order'),
-                'packItems',
             ]);
 
         $products = $catalogQuery()
@@ -63,7 +58,7 @@ final class StorefrontData
             ->get()
             ->map(fn (Product $product): array => $this->productCard($product));
 
-        $bestPacks = $catalogQuery()->where('is_pack', true)->where('is_featured', true)->latest()->limit(4)->get()
+        $bestPacks = $catalogQuery()->where('is_pack', true)->latest()->limit(4)->get()
             ->map(fn (Product $product): array => $this->productCard($product));
         $featuredProducts = $catalogQuery()->where('is_pack', false)->where('is_featured', true)->latest()->limit(4)->get()
             ->map(fn (Product $product): array => $this->productCard($product));
@@ -90,6 +85,7 @@ final class StorefrontData
     {
         $image = $product->product_images->first();
         $availableVariants = $product->product_variants->filter(fn ($variant): bool => $variant->stock_quantity === null || $variant->stock_quantity > 0);
+        $startingPrice = $availableVariants->min('price') ?? $product->product_variants->min('price');
         $artKey = match (true) {
             Str::contains($product->slug, 'eucalyptus') => 'eucalyptus',
             Str::contains($product->slug, 'amlou') => 'amandier',
@@ -107,14 +103,10 @@ final class StorefrontData
             'category' => $product->category?->name,
             'is_pack' => $product->is_pack,
             'is_featured' => $product->is_featured,
-            'pack_items' => $product->packItems->map(fn (Product $packItem): array => [
-                'id' => $packItem->id,
-                'name' => $packItem->name,
-            ])->all(),
             'image' => $artKey,
             'image_url' => $image ? Storage::disk('public')->url($image->image) : null,
             'image_alt' => $image?->alt ?: $product->name,
-            'starting_price' => (float) ($availableVariants->min('price') ?? $product->product_variants->min('price')),
+            'starting_price' => $startingPrice !== null ? (float) $startingPrice : null,
             'variants' => $product->product_variants->map(fn ($variant): array => [
                 'id' => $variant->id,
                 'name' => $variant->name,

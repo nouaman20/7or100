@@ -22,25 +22,28 @@
                 <label>{{ __('products.slug') }}<input name="slug" value="{{ old('slug', $product->slug) }}" required maxlength="255" autocomplete="off"></label>
                 <label class="wide">{{ __('products.category') }}<select name="category_id" required><option value="">{{ __('products.choose_category') }}</option>@foreach($categories as $category)<option value="{{ $category->id }}" @selected(old('category_id', $product->category_id) === $category->id)>{{ $category->name }}</option>@endforeach</select>@if($categories->isEmpty())<small>{{ __('products.no_categories') }} <a href="{{ route('dashboard.categories.index') }}">{{ __('products.manage_categories') }}</a></small>@endif</label>
                 <label class="wide">{{ __('products.description') }}<textarea name="description" rows="4">{{ old('description', $product->description) }}</textarea></label>
-                <label class="product-check"><input type="checkbox" name="is_active" value="1" @checked(old('is_active', $product->is_active))>{{ __('products.active') }}</label>
-                <label class="product-check"><input type="checkbox" name="is_featured" value="1" @checked(old('is_featured', $product->is_featured ?? false))>{{ __('products.featured') }}</label>
-                <label class="product-check"><input type="checkbox" name="is_pack" value="1" data-pack-toggle @checked(old('is_pack', $product->is_pack ?? false))>{{ __('products.is_pack') }}</label>
-            </div>
-        </section>
-
-        <section class="product-form-panel pack-items-panel" data-pack-fields @if(! old('is_pack', $product->is_pack ?? false)) hidden @endif>
-            <div class="product-panel-heading"><span>02</span><div><h2>{{ __('products.pack_contents') }}</h2><p>{{ __('products.pack_contents_help') }}</p></div></div>
-            <div class="pack-product-options">
-                @forelse($packProducts as $packProduct)
-                    <label class="pack-product-option"><input type="checkbox" name="pack_items[]" value="{{ $packProduct->id }}" @checked(in_array($packProduct->id, old('pack_items', $product->packItems->pluck('id')->all()), true))><span>{{ $packProduct->name }}</span></label>
-                @empty
-                    <p class="pack-product-empty">{{ __('products.no_pack_products') }}</p>
-                @endforelse
+                <div class="product-option-grid wide">
+                    <label class="product-option-card">
+                        <span class="product-option-copy"><span class="product-option-icon"><i data-lucide="eye"></i></span><span class="product-option-text"><strong>{{ __('products.active') }}</strong><small>{{ __('products.active_help') }}</small></span></span>
+                        <input type="checkbox" name="is_active" value="1" @checked(old('is_active', $product->is_active))>
+                        <span class="product-option-switch" aria-hidden="true"></span>
+                    </label>
+                    <label class="product-option-card">
+                        <span class="product-option-copy"><span class="product-option-icon"><i data-lucide="star"></i></span><span class="product-option-text"><strong>{{ __('products.featured') }}</strong><small>{{ __('products.featured_help') }}</small></span></span>
+                        <input type="checkbox" name="is_featured" value="1" @checked(old('is_featured', $product->is_featured ?? false))>
+                        <span class="product-option-switch" aria-hidden="true"></span>
+                    </label>
+                    <label class="product-option-card">
+                        <span class="product-option-copy"><span class="product-option-icon"><i data-lucide="package-check"></i></span><span class="product-option-text"><strong>{{ __('products.is_pack') }}</strong><small>{{ __('products.is_pack_help') }}</small></span></span>
+                        <input type="checkbox" name="is_pack" value="1" @checked(old('is_pack', $product->is_pack ?? false))>
+                        <span class="product-option-switch" aria-hidden="true"></span>
+                    </label>
+                </div>
             </div>
         </section>
 
         <section class="product-form-panel">
-            <div class="product-panel-heading"><span>03</span><div><h2>{{ __('products.images') }}</h2><p>{{ __('products.images_help') }}</p></div></div>
+            <div class="product-panel-heading"><span>02</span><div><h2>{{ __('products.images') }}</h2><p>{{ __('products.images_help') }}</p></div></div>
             <div class="existing-product-images">
                 @foreach($product->product_images as $image)
                     <article class="product-image-editor">
@@ -57,9 +60,9 @@
         </section>
 
         <section class="product-form-panel">
-            <div class="product-panel-heading"><span>04</span><div><h2>{{ __('products.variants') }}</h2><p>{{ __('products.variants_help') }}</p></div><button type="button" class="product-add-row" id="addVariant"><i data-lucide="plus"></i>{{ __('products.add_variant') }}</button></div>
+            <div class="product-panel-heading"><span>03</span><div><h2>{{ __('products.variants') }}</h2><p>{{ __('products.variants_help') }} {{ __('products.variants_optional') }}</p></div><button type="button" class="product-add-row" id="addVariant"><i data-lucide="plus"></i>{{ __('products.add_variant') }}</button></div>
             <div class="variant-editor-list" id="variantEditorList">
-                @forelse($product->product_variants as $variant)
+                @foreach($product->product_variants as $variant)
                     <article class="variant-editor-row" data-variant-row>
                         <input type="hidden" name="variants[{{ $variant->id }}][is_active]" value="0"><label>{{ __('products.variant_name') }}<input name="variants[{{ $variant->id }}][name]" value="{{ $variant->name }}" required></label>
                         <label>{{ __('products.weight_grams') }}<input type="number" name="variants[{{ $variant->id }}][weight_grams]" value="{{ $variant->weight_grams }}" min="1" required></label>
@@ -68,16 +71,7 @@
                         <label class="product-check"><input type="checkbox" name="variants[{{ $variant->id }}][is_active]" value="1" @checked($variant->is_active)>{{ __('products.active') }}</label>
                         <label class="variant-remove-check"><input type="checkbox" name="remove_variants[]" value="{{ $variant->id }}">{{ __('products.remove_variant') }}</label>
                     </article>
-                @empty
-                    <article class="variant-editor-row" data-variant-row>
-                        <label>{{ __('products.variant_name') }}<input name="variants[new_0][name]" required placeholder="500 g"></label>
-                        <label>{{ __('products.weight_grams') }}<input type="number" name="variants[new_0][weight_grams]" min="1" required placeholder="500"></label>
-                        <label>{{ __('products.price') }}<input type="number" name="variants[new_0][price]" min="0" step="0.01" required placeholder="139.00"></label>
-                        <label>{{ __('products.stock') }}<input type="number" name="variants[new_0][stock_quantity]" min="0" placeholder="{{ __('products.unlimited_stock') }}"></label>
-                        <label class="product-check"><input type="checkbox" name="variants[new_0][is_active]" value="1" checked>{{ __('products.active') }}</label>
-                        <button type="button" class="variant-remove-button" data-remove-new>{{ __('products.remove_variant') }}</button>
-                    </article>
-                @endforelse
+                @endforeach
             </div>
         </section>
 
@@ -91,13 +85,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const packToggle = document.querySelector('[data-pack-toggle]');
-    const packFields = document.querySelector('[data-pack-fields]');
-    packToggle?.addEventListener('change', () => {
-        packFields.hidden = !packToggle.checked;
-    });
-
-    let variantIndex = {{ $product->product_variants->isEmpty() ? 1 : 0 }};
+    let variantIndex = 0;
     const variants = document.getElementById('variantEditorList');
     document.getElementById('addVariant')?.addEventListener('click', () => {
         const row = document.getElementById('variantTemplate').content.cloneNode(true);

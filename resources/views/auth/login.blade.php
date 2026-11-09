@@ -52,40 +52,54 @@
             isolation: isolate;
             background-color: #e9d9ae;
             background-image: url("{{ asset('images/honey-hero.jpg') }}");
-            background-position: center;
+            background-position: center 46%;
             background-size: cover;
             background-repeat: no-repeat;
         }
 
-        /* Soft overlay keeps text readable over your photo. */
+        /* Keep the honey image visible while giving the copy a calm contrast layer. */
         .hero-panel::before {
             content: "";
             position: absolute;
             inset: 0;
-            z-index: -1;
-            background: linear-gradient(
-                110deg,
-                rgba(255, 251, 232, .45) 0%,
-                rgba(255, 251, 232, .17) 45%,
-                rgba(255, 251, 232, 0) 100%
-            );
+            z-index: 0;
+            background:
+                linear-gradient(180deg, rgba(16, 31, 19, .05) 15%, rgba(16, 31, 19, .02) 43%, rgba(12, 27, 17, .48) 100%),
+                linear-gradient(105deg, rgba(15, 30, 18, .26) 0%, rgba(15, 30, 18, 0) 82%);
             pointer-events: none;
         }
 
         .hero-content {
             position: relative;
             z-index: 1;
-            width: min(100% - 64px, 470px);
+            display: flex;
+            width: min(100% - 72px, 520px);
+            min-height: 100vh;
             margin: 0 auto;
-            padding-top: 78px;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: clamp(34px, 6vh, 66px) 0 clamp(30px, 5vh, 58px);
         }
 
         .brand {
             display: inline-flex;
             align-items: center;
             gap: 12px;
+            padding: 4px 13px;
+            border: 1px solid rgba(255, 255, 255, .62);
+            border-radius: 18px;
             color: var(--forest);
+            background: rgba(255, 252, 240, .78);
+            box-shadow: 0 10px 32px rgba(26, 35, 17, .12);
+            backdrop-filter: blur(12px);
             text-decoration: none;
+            transition: transform .2s ease, background .2s ease;
+        }
+
+        .brand:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 253, 246, .94);
         }
 
         .auth-brand-logo {
@@ -96,13 +110,20 @@
         }
 
         .hero-copy {
-            margin-top: 34px;
-            max-width: 450px;
+            width: 100%;
+            max-width: 480px;
+            margin: 0;
+            padding: clamp(22px, 3vw, 34px);
+            border: 1px solid rgba(255, 255, 255, .24);
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(25, 48, 29, .9), rgba(30, 52, 33, .78));
+            box-shadow: 0 22px 60px rgba(13, 25, 15, .28);
+            backdrop-filter: blur(14px);
         }
 
         .hero-copy h1 {
             margin: 0;
-            color: #292d17;
+            color: #fffdf5;
             font-size: clamp(30px, 2.2vw, 36px);
             font-weight: 900;
             line-height: 1.08;
@@ -120,9 +141,47 @@
         .hero-copy p {
             max-width: 390px;
             margin: 0;
-            color: #5e604e;
+            color: rgba(255, 253, 245, .84);
             font-size: 15px;
             line-height: 1.9;
+        }
+
+        .hero-home-button {
+            display: inline-flex;
+            min-height: 46px;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 22px;
+            padding: 0 17px;
+            border: 1px solid rgba(255, 210, 104, .72);
+            border-radius: 12px;
+            color: #26331b;
+            background: linear-gradient(115deg, #ffd36e, #ffbd39);
+            box-shadow: 0 9px 24px rgba(7, 18, 9, .2);
+            font-size: 13px;
+            font-weight: 800;
+            text-decoration: none;
+            transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
+        }
+
+        .hero-home-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 13px 28px rgba(7, 18, 9, .27);
+            filter: saturate(1.08);
+        }
+
+        .hero-home-button svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        [dir="rtl"] .hero-home-arrow {
+            transform: rotate(180deg);
+        }
+
+        .mobile-home-button {
+            display: none;
         }
 
         /* RIGHT PANEL */
@@ -493,7 +552,8 @@
 
             .hero-content {
                 width: calc(100% - 56px);
-                padding-top: 55px;
+                padding-top: 42px;
+                padding-bottom: 34px;
             }
 
             .hero-copy h1 {
@@ -521,6 +581,31 @@
 
             .hero-panel {
                 display: none;
+            }
+
+            .mobile-home-button {
+                position: absolute;
+                z-index: 5;
+                top: 14px;
+                inset-inline-start: 16px;
+                display: inline-flex;
+                min-height: 38px;
+                align-items: center;
+                gap: 8px;
+                padding: 0 12px;
+                border: 1px solid #ead9b2;
+                border-radius: 11px;
+                color: #315238;
+                background: rgba(255, 253, 247, .96);
+                box-shadow: 0 4px 14px rgba(49, 56, 34, .08);
+                font-size: 12px;
+                font-weight: 700;
+                text-decoration: none;
+            }
+
+            .mobile-home-button svg {
+                width: 16px;
+                height: 16px;
             }
 
             .form-panel {
@@ -605,7 +690,7 @@
 
         <div class="hero-content">
 
-            <a href="{{ url('/') }}" class="brand" aria-label="7or 100 - Accueil">
+            <a href="{{ route('storefront.home') }}" class="brand" aria-label="7or 100 - Accueil">
                 <img class="auth-brand-logo" src="{{ asset('images/logo.png') }}" alt="7or 100">
             </a>
 
@@ -615,12 +700,32 @@
                 <p>
                     {{ __('login.hero_copy') }}
                 </p>
+                <a href="{{ route('storefront.home') }}" class="hero-home-button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="m3 10 9-7 9 7" />
+                        <path d="M5 9v11h14V9" />
+                        <path d="M9 20v-6h6v6" />
+                    </svg>
+                    <span>{{ __('login.home_button') }}</span>
+                    <svg class="hero-home-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M5 12h14" />
+                        <path d="m13 6 6 6-6 6" />
+                    </svg>
+                </a>
             </div>
         </div>
     </aside>
 
     <!-- RIGHT: LOGIN PANEL -->
     <main class="form-panel">
+        <a href="{{ route('storefront.home') }}" class="hero-home-button mobile-home-button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m3 10 9-7 9 7" />
+                <path d="M5 9v11h14V9" />
+                <path d="M9 20v-6h6v6" />
+            </svg>
+            <span>{{ __('login.home_button') }}</span>
+        </a>
 
         <!-- Honeycomb decoration -->
         <div class="honeycomb honeycomb-top" aria-hidden="true">

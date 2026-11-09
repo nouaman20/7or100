@@ -4,6 +4,7 @@ return [
     'title' => 'Connexion',
     'hero_title' => 'La nature vous offre le meilleur',
     'hero_copy' => 'Des miels authentiques et des produits naturels pour une vie plus saine.',
+    'home_button' => 'Retour à la boutique',
     'heading' => 'Bon retour !',
     'subtitle' => 'Connectez-vous pour continuer',
     'email' => 'Votre email',

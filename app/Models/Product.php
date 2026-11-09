@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Product extends Model
 {
@@ -47,15 +46,5 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
-    }
-
-    public function packItems(): BelongsToMany
-    {
-        return $this->belongsToMany(self::class, 'product_pack_items', 'pack_product_id', 'product_id')->withTimestamps();
-    }
-
-    public function includedInPacks(): BelongsToMany
-    {
-        return $this->belongsToMany(self::class, 'product_pack_items', 'product_id', 'pack_product_id')->withTimestamps();
     }
 }
